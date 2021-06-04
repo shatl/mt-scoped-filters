@@ -1,5 +1,6 @@
 namespace WebApi.Filters
 {
+    using System;
     using System.Threading.Tasks;
     using GreenPipes;
     using MassTransit;
@@ -9,24 +10,24 @@ namespace WebApi.Filters
         IFilter<ConsumeContext<T>>
         where T : class
     {
-        readonly Token _token;
+        private readonly ITokenProvider _tokenProvider;
 
-        public TokenConsumeFilter(Token token)
+        public TokenConsumeFilter(ITokenProvider tokenProvider)
         {
-            _token = token;
+            _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
         }
 
         public Task Send(ConsumeContext<T> context, IPipe<ConsumeContext<T>> next)
         {
             var token = context.Headers.Get<string>("Token");
-
-            _token.Value = token;
+            if (!string.IsNullOrEmpty(token)) _tokenProvider.SetToken(new Token {Value = token});
 
             return next.Send(context);
         }
 
         public void Probe(ProbeContext context)
         {
+            context.CreateScope("send-token");
         }
     }
 }

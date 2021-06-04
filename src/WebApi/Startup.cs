@@ -24,13 +24,16 @@ namespace WebApi
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule<MassTransitModule>();
+            builder.RegisterType<HttpContextTokenProvider>().SingleInstance()
+                .As<ITokenProvider>();
+            builder.RegisterType<TokenActionFilter>().AsSelf().InstancePerLifetimeScope();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMassTransitHostedService();
-
+            services.AddHttpContextAccessor();
             services.AddControllers(options => { options.Filters.Add(typeof(TokenActionFilter)); });
 
             services.AddSwaggerGen(c =>

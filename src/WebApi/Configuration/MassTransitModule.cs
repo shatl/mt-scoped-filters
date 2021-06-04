@@ -20,6 +20,7 @@
             builder.AddMassTransit(x =>
             {
                 x.AddConsumer<AddInventoryConsumer>();
+                x.AddConsumer<AddInventoryFaultComsumer>();
 
                 x.UsingInMemory((context, cfg) =>
                 {
@@ -32,16 +33,16 @@
                     cfg.UseMessageLifetimeScope(context.GetRequiredService<ILifetimeScope>(), ScopeTag,
                         (containerBuilder, consumeContext) =>
                         {
-                            // other registrations
+                            containerBuilder.RegisterType<ScopedTokenProvider>()
+                                .InstancePerLifetimeScope()
+                                .As<ITokenProvider>();
+
                         }
                     );
                     cfg.UseInMemoryOutbox();
                     cfg.ConfigureEndpoints(context);
                 });
             });
-
-            builder.RegisterType<Token>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<TokenActionFilter>().AsSelf().InstancePerLifetimeScope();
         }
     }
 }

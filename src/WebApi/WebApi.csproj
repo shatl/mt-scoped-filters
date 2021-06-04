@@ -3,14 +3,31 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
-    <PackageReference Include="MassTransit.AspNetCore" Version="7.2.0" />
-    <PackageReference Include="MassTransit.Autofac" Version="7.2.0" />
+    <PackageReference Include="Automatonymous" Version="5.1.1" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
   </ItemGroup>
 
+  <!-- build agains nuget MT packages -->
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.2.0" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="MassTransit.Autofac" Version="7.2.0" />
+  </ItemGroup>
+
+  <!-- uncomment to build agains MT source code 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\MassTransit\src\Containers\MassTransit.AspNetCoreIntegration\MassTransit.AspNetCoreIntegration.csproj" />
+    <ProjectReference Include="..\..\..\MassTransit\src\Containers\MassTransit.AutofacIntegration\MassTransit.AutofacIntegration.csproj" />
+    <ProjectReference Include="..\..\..\MassTransit\src\MassTransit\MassTransit.csproj" />
+  </ItemGroup>
+  -->
 </Project>
